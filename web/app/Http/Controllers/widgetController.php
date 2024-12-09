@@ -21,7 +21,7 @@ class widgetController extends Controller
     {
         $session = $this->helperController->getShop($request);
         $generalModules = GeneralModules::all(); // Fetch all general modules
-
+        //Details of the shop Modules
         $shopModules= Modules::where('shop_id', $session->shop)
                     ->with('generalModule:id,name,handle,description')
                     ->get();
@@ -37,7 +37,7 @@ class widgetController extends Controller
                     return $shopModule->general_module_id === $generalModule->id;
                 });
                 if (!$exists) {
-                    Log::info('New Module is add');
+                    Log::info('New Module');
                     Modules::create([
                         'shop_id' => $session->shop,
                         'custom_settings' => $generalModule->settings,
@@ -84,6 +84,20 @@ class widgetController extends Controller
         QUERY;
         log::info('Request::'.json_encode($request->all()));
         $generalModule= GeneralModules::findOrFail($request->general_module_id);
+        $metafieldValue = [
+            'title' => $request->title,
+            'content' => $request->content,
+            'bgColor' => $request->bgColor ?? '#ffffff',  // Default to white if null
+            'padding' => $request->padding ?? '10px',   // Default padding
+            'margin' => $request->margin ?? '5px',     // Default margin
+            'fontSize' => $request->fontSize ?? '14px', // Default font size
+            'fontWeight' => $request->fontWeight ?? 'normal', // Default font weight
+            'textColor' => $request->textColor ?? '#000000', // Default text color (black)
+            'emailPadding' => $request->emailPadding ?? '10px',  // Default padding for email input
+            'buttonBgColor' => $request->buttonBgColor ?? '#000000', // Default button background color (black)
+            'buttonFontSize' => $request->buttonFontSize ?? '14px', // Default button font size
+        ];
+
         $variables = [
             'metafields' => [
                 [
@@ -91,11 +105,7 @@ class widgetController extends Controller
                     'key' => "Header_widget",
                     'ownerId' => $session->shop_global_id, 
                     'type' => 'json_string', 
-                    'value' => json_encode([ 
-                        'title' => 'Example Widget',
-                        'content' => 'This is widget content',
-                        'bgColor' => '#ededed',
-                    ]),
+                    'value' => json_encode($metafieldValue),
                 ],
             ],
         ];
