@@ -22,7 +22,9 @@ class widgetController extends Controller
         $session = $this->helperController->getShop($request);
         $generalModules = GeneralModules::all(); // Fetch all general modules
 
-        $shopModules=Modules::where('shop_id',$session->shop)->get();
+        $shopModules= Modules::where('shop_id', $session->shop)
+                    ->with('generalModule:id,name,handle,description')
+                    ->get();
 
        
         if ($generalModules->count() == $shopModules->count()) {
@@ -35,16 +37,19 @@ class widgetController extends Controller
                     return $shopModule->general_module_id === $generalModule->id;
                 });
                 if (!$exists) {
+                    Log::info('New Module is add');
                     Modules::create([
                         'shop_id' => $session->shop,
-                        'custome_settings' => $generalModule->settings,
+                        'custom_settings' => $generalModule->settings,
                         'general_module_id' => $generalModule->id,
                     ]);
                 }
             }
 
             // Fetch updated shop modules
-            $updatedShopModules = Modules::where('shop_id', $session->shop)->get();
+            $updatedShopModules = Modules::where('shop_id', $session->shop)
+                                ->with('generalModule:id,name,handle,description')
+                                ->get();
 
             // Return the updated shop modules
             return response()->json(['modules' => $updatedShopModules]);
