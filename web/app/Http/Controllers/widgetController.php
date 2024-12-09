@@ -37,7 +37,7 @@ class widgetController extends Controller
                     return $shopModule->general_module_id === $generalModule->id;
                 });
                 if (!$exists) {
-                    Log::info('New Module is add');
+                    Log::info('New Module');
                     Modules::create([
                         'shop_id' => $session->shop,
                         'custom_settings' => $generalModule->settings,
@@ -84,6 +84,20 @@ class widgetController extends Controller
         QUERY;
         log::info('Request::'.json_encode($request->all()));
         $generalModule= GeneralModules::findOrFail($request->general_module_id);
+        $metafieldValue = [
+            'title' => 'Custom Widget',
+            'content' => 'This is a custom widget content',
+            'bgColor' => $customCSS['container_bg_color'] ?? '#ffffff',  // Default to white if null
+            'padding' => $customCSS['container_padding'] ?? '10px',   // Default padding
+            'margin' => $customCSS['container_margin'] ?? '5px',     // Default margin
+            'fontSize' => $customCSS['container_font_size'] ?? '14px', // Default font size
+            'fontWeight' => $customCSS['container_font_weight'] ?? 'normal', // Default font weight
+            'textColor' => $customCSS['container_text_color'] ?? '#000000', // Default text color (black)
+            'emailPadding' => $customCSS['email_padding'] ?? '10px',  // Default padding for email input
+            'buttonBgColor' => $customCSS['button_bg_color'] ?? '#000000', // Default button background color (black)
+            'buttonFontSize' => $customCSS['button_font_size'] ?? '14px', // Default button font size
+        ];
+
         $variables = [
             'metafields' => [
                 [
@@ -91,11 +105,7 @@ class widgetController extends Controller
                     'key' => "Header_widget",
                     'ownerId' => $session->shop_global_id, 
                     'type' => 'json_string', 
-                    'value' => json_encode([ 
-                        'title' => 'Example Widget',
-                        'content' => 'This is widget content',
-                        'bgColor' => '#ededed',
-                    ]),
+                    'value' => json_encode($metafieldValue),
                 ],
             ],
         ];
