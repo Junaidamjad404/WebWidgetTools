@@ -85,17 +85,17 @@ class widgetController extends Controller
         log::info('Request::'.json_encode($request->all()));
         $generalModule= GeneralModules::findOrFail($request->general_module_id);
         $metafieldValue = [
-            'title' => 'Custom Widget',
-            'content' => 'This is a custom widget content',
-            'bgColor' => $customCSS['container_bg_color'] ?? '#ffffff',  // Default to white if null
-            'padding' => $customCSS['container_padding'] ?? '10px',   // Default padding
-            'margin' => $customCSS['container_margin'] ?? '5px',     // Default margin
-            'fontSize' => $customCSS['container_font_size'] ?? '14px', // Default font size
-            'fontWeight' => $customCSS['container_font_weight'] ?? 'normal', // Default font weight
-            'textColor' => $customCSS['container_text_color'] ?? '#000000', // Default text color (black)
-            'emailPadding' => $customCSS['email_padding'] ?? '10px',  // Default padding for email input
-            'buttonBgColor' => $customCSS['button_bg_color'] ?? '#000000', // Default button background color (black)
-            'buttonFontSize' => $customCSS['button_font_size'] ?? '14px', // Default button font size
+            'title' => $request->title,
+            'content' => $request->content,
+            'bgColor' => $request->bgColor ?? '#ffffff',  // Default to white if null
+            'padding' => $request->padding ?? '10px',   // Default padding
+            'margin' => $request->margin ?? '5px',     // Default margin
+            'fontSize' => $request->fontSize ?? '14px', // Default font size
+            'fontWeight' => $request->fontWeight ?? 'normal', // Default font weight
+            'textColor' => $request->textColor ?? '#000000', // Default text color (black)
+            'emailPadding' => $request->emailPadding ?? '10px',  // Default padding for email input
+            'buttonBgColor' => $request->buttonBgColor ?? '#000000', // Default button background color (black)
+            'buttonFontSize' => $request->buttonFontSize ?? '14px', // Default button font size
         ];
 
         $variables = [
