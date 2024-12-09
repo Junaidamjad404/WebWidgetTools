@@ -21,7 +21,7 @@ class widgetController extends Controller
     {
         $session = $this->helperController->getShop($request);
         $generalModules = GeneralModules::all(); // Fetch all general modules
-
+        //Details of the shop Modules
         $shopModules= Modules::where('shop_id', $session->shop)
                     ->with('generalModule:id,name,handle,description')
                     ->get();
