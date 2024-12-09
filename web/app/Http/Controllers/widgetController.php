@@ -52,7 +52,7 @@ class widgetController extends Controller
                                 ->get();
 
             // Return the updated shop modules
-            return response()->json(['Umodules' => $updatedShopModules]);
+            return response()->json(['modules' => $updatedShopModules]);
         }
     }
     
