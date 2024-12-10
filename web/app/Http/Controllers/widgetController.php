@@ -59,7 +59,7 @@ class widgetController extends Controller
     public function setMetafield(Request $request){
         $session = $this->helperController->getShop($request);
         $shop=$this->helperController->getShopApi($session->shop);
-        if(isset($session->shop_global_id)){
+        if(!isset($session->shop_global_id)){
             $this->getShopGlobalId($shop,$session);
         }
     
