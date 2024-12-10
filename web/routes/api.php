@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/get_widget',[widgetController::class, 'getWidget'])->name('getWidget');
+Route::get('get_widget',[widgetController::class, 'getWidget'])->name('getWidget');
 Route::post('set_metafield',[widgetController::class,'setMetafield'])->name('setMetafield');
 Route::post('delete_metafield', [widgetController::class, 'deleteMetafield'])->name('deleteMetafield');
 Route::post('custom_setting', [widgetController::class, 'customSetting'])->name('customSetting');

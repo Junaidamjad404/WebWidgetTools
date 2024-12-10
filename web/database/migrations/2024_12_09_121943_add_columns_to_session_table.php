@@ -29,10 +29,10 @@ class AddColumnsToSessionTable extends Migration
     public function down()
     {
         Schema::table('sessions', function (Blueprint $table) {
-            $table->dropColumn('payload');
-            $table->dropColumn('last_activity');
-            $table->dropColumn('ip_address');
-            $table->dropColumn('user_agent');
+            $table->drop('payload')->nullable();
+            $table->drop('last_activity')->nullable();
+            $table->drop('ip_address')->nullable();
+            $table->drop('user_agent')->nullable();
         });
     }
 }
