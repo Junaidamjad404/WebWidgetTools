@@ -20,5 +20,3 @@ Route::post('set_metafield',[widgetController::class,'setMetafield'])->name('set
 Route::post('delete_metafield', [widgetController::class, 'deleteMetafield'])->name('deleteMetafield');
 Route::post('custom_setting', [widgetController::class, 'customSetting'])->name('customSetting');
 Route::post('update_module_status', [widgetController::class, 'updateModuleStatus'])->name('updateModuleStatus');
-
-Route::post('updateImage/{id}', [widgetController::class, 'updateImage'])->name('updateImage');

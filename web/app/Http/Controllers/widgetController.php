@@ -8,7 +8,6 @@ use App\Models\Session;
 use Illuminate\Http\Request;
 use App\Models\GeneralModules;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 
 class widgetController extends Controller
@@ -345,17 +344,5 @@ class widgetController extends Controller
         // Return an error if the module was not found
         return response()->json(['error' => 'Module not found.'], 404);
     }
-    public function updateImage(Request $request, $id)
-    {
-        $generalModule = GeneralModules::findOrFail($id);
 
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('images/general_modules', 'public');
-            $url = asset('storage/' . $path);
-            $generalModule->image = asset($url);
-            $generalModule->save();
-        }
-
-        return response()->json(['message' => 'Image updated successfully!', 'url' => $url]);
-    }
 }

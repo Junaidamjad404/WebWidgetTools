@@ -29,26 +29,28 @@ class GeneralModulesTableSeeder extends Seeder
         ];
         $modules = [
             [
-                'name' => 'Header Widget',
-                'handle'=> 'Header_Widget_1',
+                'name' => 'First Sign Up Discount',
+                'handle'=> 'First_Sign_Up_Discount',
                 'description' => 'A customizable header module for branding and navigation.',
+                'image'=> 'images/general_modules/FSD.png',
                 'settings' => json_encode($metafieldValue),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Footer Widget',
-                'handle' => 'Header_Widget_2',
+                'name' => 'Estimated Shipping Date and time',
+                'handle' => 'Estimated_Shipping_Date_and_time',
                 'description' => 'A customizable footer module for contact information and links.',
+                'image'=> 'images/general_modules/images.png',
                 'settings' => json_encode($metafieldValue),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Sidebar Widget',
-                'handle' => 'Header_Widget_3',
-
+                'name' => 'Shipping Details',
+                'handle' => 'Shipping_Details',
                 'description' => 'A customizable sidebar module for showcasing categories and offers.',
+                'image' => 'images/general_modules/shipping_details.png',
                 'settings' => json_encode($metafieldValue),
                 'created_at' => now(),
                 'updated_at' => now(),
