@@ -36,7 +36,7 @@ class widgetController extends Controller
 
             // Fetch shop-specific modules with related general module details
             $shopModules = Modules::where('shop_id', $session->shop)
-                ->with('generalModule:id,name,handle,description')
+                ->with('generalModule:id,name,handle,description,image')
                 ->get();
 
             // Check if generalModules and shopModules are synchronized
