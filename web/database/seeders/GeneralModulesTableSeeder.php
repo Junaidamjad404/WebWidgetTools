@@ -30,7 +30,7 @@ class GeneralModulesTableSeeder extends Seeder
         $modules = [
             [
                 'name' => 'Header Widget',
-                'handle'=> 'Header-Widget-1',
+                'handle'=> 'Header_Widget_1',
                 'description' => 'A customizable header module for branding and navigation.',
                 'settings' => json_encode($metafieldValue),
                 'created_at' => now(),
@@ -38,7 +38,7 @@ class GeneralModulesTableSeeder extends Seeder
             ],
             [
                 'name' => 'Footer Widget',
-                'handle' => 'Header-Widget-2',
+                'handle' => 'Header_Widget_2',
                 'description' => 'A customizable footer module for contact information and links.',
                 'settings' => json_encode($metafieldValue),
                 'created_at' => now(),
@@ -46,7 +46,7 @@ class GeneralModulesTableSeeder extends Seeder
             ],
             [
                 'name' => 'Sidebar Widget',
-                'handle' => 'Header-Widget-3',
+                'handle' => 'Header_Widget_3',
 
                 'description' => 'A customizable sidebar module for showcasing categories and offers.',
                 'settings' => json_encode($metafieldValue),
