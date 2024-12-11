@@ -14,10 +14,10 @@ class AddColumnsToSessionTable extends Migration
     public function up()
     {
         Schema::table('sessions', function (Blueprint $table) {
-            $table->string('payload');
-            $table->string('last_activity');
-            $table->string('ip_address');
-            $table->string('user_agent');
+            $table->string('payload')->nullable;
+            $table->string('last_activity')->nullable;
+            $table->string('ip_address')->nullable;
+            $table->string('user_agent')->nullable;
         });
     }
 
