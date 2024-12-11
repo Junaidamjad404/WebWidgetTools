@@ -96,8 +96,8 @@ class widgetController extends Controller
             $shop = $this->helperController->getShopApi($session->shop);
 
             // Check if shop global ID exists, if not, retrieve it
-            if (!isset($session->shop_global_id)) {
-                $this->getShopGlobalId($shop, $session);
+            if (!isset($session->app_id)) {
+                $this->getAppInstalledGlobalId($shop, $session);
             }
 
             // Define GraphQL query for setting metafields
@@ -149,7 +149,7 @@ class widgetController extends Controller
                     [
                         'namespace' => 'custom_widgets',
                         'key' => $generalModule->handle,
-                        'ownerId' => $session->shop_global_id,
+                        'ownerId' => $session->app_id,
                         'type' => 'json_string',
                         'value' => json_encode($metafieldValue),
                     ],
@@ -189,25 +189,22 @@ class widgetController extends Controller
         }
     }
 
-    protected function getShopGlobalId($shop, $session)
+    protected function getAppInstalledGlobalId($shop, $session)
     {
         try {
             // Define GraphQL query to get shop details
-            $query = <<<'QUERY'
-            query {
-                shop {
-                    id
-                    name
-                    email
+            $query =<<<'Query'
+                query {
+                    currentAppInstallation {
+                        id
+                    }
                 }
-            }
-        QUERY;
+            Query;
 
             // Make the API call
             $response = $shop->graph($query);
-
             // Log the response from the API
-            log::info('Response from Get Shop Global ID: ' . json_encode($response));
+            log::info('Response from Get App ID: ' . json_encode($response));
 
             // Check for errors in the response
             if (isset($response['errors']) && $response['errors']) {
@@ -216,13 +213,13 @@ class widgetController extends Controller
             }
 
             // Save shop global ID in session
-            if (isset($response['body']->data->shop->id)) {
-                $session->shop_global_id = $response['body']->data->shop->id;
+            if (isset($response['body']->data->currentAppInstallation->id)) {
+                $session->app_id = $response['body']->data->currentAppInstallation->id;
                 $session->save();
             }
         } catch (Exception $e) {
             // Handle any unexpected exceptions
-            log::error('Exception occurred in getShopGlobalId: ' . $e->getMessage(), ['stack' => $e->getTraceAsString()]);
+            log::error('Exception occurred in getAppInstalledGlobalId: ' . $e->getMessage(), ['stack' => $e->getTraceAsString()]);
         }
     }
 
