@@ -36,7 +36,6 @@ use App\Exceptions\ShopifyProductCreatorException;
 */
 
 Route::fallback(function (Request $request) {
-    Log::info('Fallback');
     if (Context::$IS_EMBEDDED_APP &&  $request->query("embedded", false) === "1") {
         if (env('APP_ENV') === 'production') {
             return file_get_contents(public_path('index.html'));

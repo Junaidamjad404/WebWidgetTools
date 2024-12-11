@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddShopGlobalIdToSessions extends Migration
+class AddAppIdToSession extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddShopGlobalIdToSessions extends Migration
     public function up()
     {
         Schema::table('sessions', function (Blueprint $table) {
-            $table->string('shop_global_id')->nullable();
+            $table->string('app_id')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddShopGlobalIdToSessions extends Migration
     public function down()
     {
         Schema::table('sessions', function (Blueprint $table) {
-            $table->dropColumn('shop_global_id');
+            $table->drop('app_id');
         });
     }
 }

@@ -14,7 +14,7 @@ class AddScopeExpiresAccessTokenToSessions extends Migration
     public function up()
     {
         Schema::table('sessions', function (Blueprint $table) {
-            $table->string('scope')->nullable();
+            $table->longtext('scope')->nullable();
             $table->string('access_token')->nullable();
             $table->dateTime('expires_at')->nullable();
         });
