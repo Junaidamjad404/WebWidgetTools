@@ -350,6 +350,7 @@ class widgetController extends Controller
             'shopDomain' => 'required|string',
             'email' => 'required|email',
         ]);
+        log::info('Request of checkCustomer'.json_encode($request->all()));
         // Retrieve shop session and shop API instance
         $session =Session::where('shop',$request->shopDomain)->first();
         $shop = $this->helperController->getShopApi($session->shop);
