@@ -414,7 +414,7 @@ class widgetController extends Controller
                 ],
             ],
         ];
-        $response = $shop>graph($query, $variables);
+        $response = $shop->graph($query, $variables);
 
         return $response;
     }
