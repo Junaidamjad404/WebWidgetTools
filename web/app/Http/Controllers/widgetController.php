@@ -389,7 +389,7 @@ class widgetController extends Controller
         return $this->getCustomer($shop,$email);
 
     }
-    protected function customerCreate($shop,$customerEmail = null)
+    public function customerCreate($shop,$customerEmail = null)
     {
         $query = <<<'QUERY'
         mutation customerCreate($input: CustomerInput!) {
