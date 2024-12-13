@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Exception;
 use App\Models\Modules;
 use App\Models\Session;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Models\GeneralModules;
 use Illuminate\Support\Facades\Log;
