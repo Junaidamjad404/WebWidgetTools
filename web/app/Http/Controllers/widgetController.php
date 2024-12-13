@@ -386,7 +386,7 @@ class widgetController extends Controller
         Log::info('No customer found with orders for email: '.$email);
        
 
-        return $this->getCustomer($shop,$email);
+        return $this->getCustomer($session,$shop,$email);
 
     }
     public function customerCreate($shop,$customerEmail = null)
@@ -419,7 +419,7 @@ class widgetController extends Controller
         return $response;
     }
 
-    public function getCustomer($shop,$customerEmail)
+    public function getCustomer($session,$shop,$customerEmail)
     {
 
         $query = <<<'QUERY'
@@ -468,7 +468,7 @@ class widgetController extends Controller
                 }
             }
             Customer::create([
-                'shop_id' => $this->shopId,
+                'shop_id' => $session->id,
                 'email' => $customerEmail,
             ]);
 
