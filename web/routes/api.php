@@ -14,9 +14,14 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+//widget apis
+Route::post('/check-customer', [widgetController::class, 'checkCustomer'])->name('checkCustomer');
+
+
 
 Route::get('get_widget',[widgetController::class, 'getWidget'])->name('getWidget');
 Route::post('set_metafield',[widgetController::class,'setMetafield'])->name('setMetafield');
 Route::post('delete_metafield', [widgetController::class, 'deleteMetafield'])->name('deleteMetafield');
 Route::post('custom_setting', [widgetController::class, 'customSetting'])->name('customSetting');
 Route::post('update_module_status', [widgetController::class, 'updateModuleStatus'])->name('updateModuleStatus');
+Route::get('getappmetafield',[widgetController::class, 'getappmetafield'])->name('getappmetafield');

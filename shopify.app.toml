@@ -1,7 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "838e074fbf5dc10b75f771c5cec3053d"
-application_url = "https://lucy-overcome-bras-geography.trycloudflare.com"
+application_url = "https://devoted-organizer-meetup-traveler.trycloudflare.com"
 embedded = true
 name = "Conversion-king"
 handle = "conversion-king-1"
@@ -16,13 +16,13 @@ use_legacy_install_flow = true
 
 [auth]
 redirect_urls = [
-  "https://lucy-overcome-bras-geography.trycloudflare.com/auth/callback",
-  "https://lucy-overcome-bras-geography.trycloudflare.com/auth/shopify/callback",
-  "https://lucy-overcome-bras-geography.trycloudflare.com/api/auth/callback"
+  "https://devoted-organizer-meetup-traveler.trycloudflare.com/auth/callback",
+  "https://devoted-organizer-meetup-traveler.trycloudflare.com/auth/shopify/callback",
+  "https://devoted-organizer-meetup-traveler.trycloudflare.com/api/auth/callback"
 ]
 
 [app_proxy]
-url = "https://lucy-overcome-bras-geography.trycloudflare.com/api"
+url = "https://devoted-organizer-meetup-traveler.trycloudflare.com/api"
 subpath = "view"
 prefix = "a"
 
@@ -32,3 +32,4 @@ embedded = false
 [build]
 dev_store_url = "junaidamjad936.myshopify.com"
 automatically_update_urls_on_dev = true
+include_config_on_deploy = true

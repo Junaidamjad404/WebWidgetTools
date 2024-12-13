@@ -140,7 +140,9 @@ class widgetController extends Controller
                 'emailPadding' => $request->emailPadding ?? '10px',
                 'buttonBgColor' => $request->buttonBgColor ?? '#000000',
                 'buttonFontSize' => $request->buttonFontSize ?? '14px',
-                "discount_percentage" => $request->discount_percentage ?? '10%',
+                "discount_percentage" => $request->discount_percentage ?? '10%', 
+                "status" => $request->status ?? false ,
+
             ];
 
             // Set variables for the GraphQL request
@@ -254,7 +256,7 @@ class widgetController extends Controller
             // Prepare variables for the GraphQL request
             $variables = [
                 "metafields" => [[
-                    "ownerId" => $session->shop_global_id,
+                    "ownerId" => $session->app_id,
                     'namespace' => 'custom_widgets',
                     'key' => $generalModule->handle,
                 ]],
@@ -341,7 +343,51 @@ class widgetController extends Controller
         // Return an error if the module was not found
         return response()->json(['error' => 'Module not found.'], 404);
     }
-    protected function customerCreate($customerEmail = null)
+     public function checkCustomer(Request $request)
+    {
+        // return ($request->all());
+        $request->validate([
+            'shopDomain' => 'required|string',
+            'email' => 'required|email',
+        ]);
+        // Retrieve shop session and shop API instance
+        $session =Session::where('shop',$request->shopDomain)->first();
+        $shop = $this->helperController->getShopApi($session->shop);
+        // Get shopDomain and email
+        $shopDomain = $request->shopDomain;
+        $email = $request->email;
+        // Retrieve the Shopify access token (this assumes it's stored in your database)
+        if (! $session ) {
+            return response()->json(['error' => 'Shop not found or unauthorized'], 403);
+        }
+
+        $customer = Customer::where('shop_id', $session->shop)
+            ->where('email', $email)
+            ->first();
+
+        if ($customer) {
+            $customer_with_order = $customer->where('no_of_orders', '!=', 0)->get();
+            if (empty($customer_with_order)) {
+                return response()->json([
+                    'error' => 'You are already a customer with orders.',
+                    'customer' => $customer,
+                ]);
+            }
+
+            return response()->json([
+                'error' => 'You are already a customer.',
+                'customer' => $customer,
+            ]);
+        }
+
+        // If no customer is found, consider returning a default response or continue with your logic.
+        Log::info('No customer found with orders for email: '.$email);
+       
+
+        return $this->getCustomer($shop,$email);
+
+    }
+    protected function customerCreate($shop,$customerEmail = null)
     {
         $query = <<<'QUERY'
         mutation customerCreate($input: CustomerInput!) {
@@ -366,12 +412,12 @@ class widgetController extends Controller
                 ],
             ],
         ];
-        $response = $this->api->graph($query, $variables);
+        $response = $shop>graph($query, $variables);
 
         return $response;
     }
 
-    public function getCustomer($customerEmail)
+    public function getCustomer($shop,$customerEmail)
     {
 
         $query = <<<'QUERY'
@@ -393,7 +439,7 @@ class widgetController extends Controller
         $variables = [
             'email' => "email:$customerEmail",
         ];
-        $response = $this->api->graph($query, $variables);
+        $response = $shop->graph($query, $variables);
         log::info('Response: '.json_encode($response));
         $customer = $response['body']->data->customers->edges;
         log::info('Customer Details: '.json_encode($customer));
@@ -405,7 +451,7 @@ class widgetController extends Controller
         } else {
             // Customer found, use their details
 
-            $newCustomer = $this->customerCreate($customerEmail);
+            $newCustomer = $this->customerCreate($shop,$customerEmail);
             log::info('New Customer: '.json_encode($newCustomer));
             // Check for errors in the response
             if (isset($newCustomer['errors']) && ! empty($newCustomer['errors'])) {
@@ -413,7 +459,7 @@ class widgetController extends Controller
                 return response()->json(['error' => 'Customer creation failed', 'details' => $newCustomer['errors']]);
             } else {
                 $customerId = $newCustomer['body']->container['data']['customerCreate']['customer']['id'];
-                $discountCode = $this->createFirstOrderDiscount($customerId);
+                $discountCode = $this->createFirstOrderDiscount($shop,$customerId);
                 if (isset($discountCode['errors']) && ! empty($discountCode['errors'])) {
                     // Return the error if customer creation failed
                     return response()->json(['error' => 'Customer creation failed', 'details' => $newCustomer['errors']]);
@@ -423,7 +469,6 @@ class widgetController extends Controller
                 'shop_id' => $this->shopId,
                 'email' => $customerEmail,
             ]);
-            Mail::to($customerEmail)->send(new FirstOrderDiscountCodeMail($this->shopName,$discountCode));
 
             return response()->json(['message' => 'new customer has been created', 'discountCode' => $discountCode]);
         }
@@ -431,7 +476,7 @@ class widgetController extends Controller
         return $response;
     }
 
-    public function createFirstOrderDiscount($customerId)
+    public function createFirstOrderDiscount($shop,$customerId)
     {
         $query = <<<'QUERY'
             mutation discountCodeBasicCreate($basicCodeDiscount: DiscountCodeBasicInput!) {
@@ -500,7 +545,7 @@ class widgetController extends Controller
         // Log the generated discount code for debugging
         Log::info('Generated Discount Code: '.$randomCode);
 
-        $response = $this->api->graph($query, $variables);
+        $response = $shop->graph($query, $variables);
         Log::info('Discount Code Creation Response: ', $response);
 
         if (isset($response['body']->container['errors']) && ! empty($response['body']->container['errors'])) {
