@@ -131,6 +131,13 @@ class widgetController extends Controller
             // Prepare metafield value with defaults
             $metafieldValue = [
                 'title' => $request->title,
+                "discount_price_container"=>[
+                    "discount_price"=>[
+                        "before"=>"OR",
+                        "After"=>"IF YOU"
+                    ],
+                    "show_form_message"=>"SIGN UP FOR OUR NEWSLET"
+                ],
                 'content' => $request->content,
                 'bgColor' => $request->bgColor ?? '#ffffff',
                 'padding' => $request->padding ?? '10px',
@@ -472,7 +479,7 @@ class widgetController extends Controller
                 'email' => $customerEmail,
             ]);
 
-            return response()->json(['message' => 'new customer has been created', 'discountCode' => $discountCode]);
+            return response()->json(['message' => 'New customer has been created', 'discountCode' => $discountCode]);
         }
 
         return $response;
