@@ -134,7 +134,6 @@ class widgetController extends Controller
                     "text"=>
                     $this->appendVariablefunc(
                         $request->discount_price_container['discount_price_container_Text'],
-                        $request->discount_price_container['discount_price_container_action_Text']
                     ),
                     "font_size"=>$request->discount_price_container['font_size'],
                     "text_color"=>$request->discount_price_container['text_color'],
@@ -154,6 +153,7 @@ class widgetController extends Controller
                 "status" => $request->status ?? false ,
 
             ];
+            dd($metafieldValue);
             // Set variables for the GraphQL request
             $variables = [
                 'metafields' => [
@@ -199,10 +199,10 @@ class widgetController extends Controller
             return response()->json(['error' => 'An unexpected error occurred.', 'details' => $e->getMessage()], 500);
         }
     }
-    public function appendVariablefunc($text,$actionText){
+    public function appendVariablefunc($text){
         $textParts = preg_split('/\s+/', $text, 2); // Split into first word and the rest of the sentence
         $textParts[0] .= ' {{discount_price}}'; // Append the placeholder {{variable}} after the first word
-        $dynamicLine = implode(' ', $textParts) . ' ' . $actionText;
+        $dynamicLine = implode(' ', $textParts) ;
         return $dynamicLine;
     }
     protected function getAppInstalledGlobalId($shop, $session)
