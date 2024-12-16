@@ -153,7 +153,6 @@ class widgetController extends Controller
                 "status" => $request->status ?? false ,
 
             ];
-            dd($metafieldValue);
             // Set variables for the GraphQL request
             $variables = [
                 'metafields' => [
