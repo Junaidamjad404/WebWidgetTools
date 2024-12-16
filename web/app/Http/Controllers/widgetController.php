@@ -200,7 +200,7 @@ class widgetController extends Controller
     }
     public function appendVariablefunc($text){
         $textParts = preg_split('/\s+/', $text, 2); // Split into first word and the rest of the sentence
-        $textParts[0] .= ' {discount_price}'; // Append the placeholder {{variable}} after the first word
+        $textParts[0] .= '{{discount_price}}'; // Append the placeholder {{variable}} after the first word
         $dynamicLine = implode(' ', $textParts) ;
         return $dynamicLine;
     }
