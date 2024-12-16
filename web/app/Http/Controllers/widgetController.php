@@ -127,16 +127,18 @@ class widgetController extends Controller
 
             // Find the general module based on provided ID
             $generalModule = GeneralModules::findOrFail($request->general_module_id);
-
             // Prepare metafield value with defaults
             $metafieldValue = [
                 'title' => $request->title,
                 "discount_price_container"=>[
-                    "discount_price"=>[
-                        "before"=>"OR",
-                        "After"=>"IF YOU"
-                    ],
-                    "show_form_message"=>"SIGN UP FOR OUR NEWSLET"
+                    "text"=>
+                    $this->appendVariablefunc(
+                        $request->discount_price_container['discount_price_container_Text'],
+                        $request->discount_price_container['discount_price_container_action_Text']
+                    ),
+                    "font_size"=>$request->discount_price_container['font_size'],
+                    "text_color"=>$request->discount_price_container['text_color'],
+                    "action"=>$request->discount_price_container['discount_price_container_action_Text']
                 ],
                 'content' => $request->content,
                 'bgColor' => $request->bgColor ?? '#ffffff',
@@ -152,7 +154,6 @@ class widgetController extends Controller
                 "status" => $request->status ?? false ,
 
             ];
-
             // Set variables for the GraphQL request
             $variables = [
                 'metafields' => [
@@ -198,7 +199,12 @@ class widgetController extends Controller
             return response()->json(['error' => 'An unexpected error occurred.', 'details' => $e->getMessage()], 500);
         }
     }
-
+    public function appendVariablefunc($text,$actionText){
+        $textParts = preg_split('/\s+/', $text, 2); // Split into first word and the rest of the sentence
+        $textParts[0] .= ' {{discount_price}}'; // Append the placeholder {{variable}} after the first word
+        $dynamicLine = implode(' ', $textParts) . ' ' . $actionText;
+        return $dynamicLine;
+    }
     protected function getAppInstalledGlobalId($shop, $session)
     {
         try {
