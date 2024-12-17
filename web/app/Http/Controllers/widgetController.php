@@ -137,6 +137,8 @@ class widgetController extends Controller
                     "font_size"=>$request->discount_price_container['font_size'] ?? "1.4rem",
                     "text_color"=>$request->discount_price_container['text_color'] ?? "black",
                     "background_color" => $request->discount_price_container['background_color'] ?? "#ffffff",
+                    "line_height" => $request->discount_price_container['line_height'] ?? "20px",
+                    "margin_top" => $request->discount_price_container['margin_top'] ?? "10px",
                     "action"=>$request->discount_price_container['discount_price_container_action_Text'] ?? "SIGN UP FOR THE NEWSLETTER."
                 ],
                 "discount_widget"=>[
