@@ -1,10 +1,10 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "838e074fbf5dc10b75f771c5cec3053d"
-application_url = "https://devoted-organizer-meetup-traveler.trycloudflare.com"
+client_id = "a0c485740dd778b1891891607bfd4b64"
+application_url = "https://phpstack-362288-5094532.cloudwaysapps.com"
 embedded = true
 name = "Conversion-king"
-handle = "conversion-king-1"
+handle = "conversion-king-live"
 
 [webhooks]
 api_version = "2024-10"
@@ -16,13 +16,13 @@ use_legacy_install_flow = true
 
 [auth]
 redirect_urls = [
-  "https://devoted-organizer-meetup-traveler.trycloudflare.com/auth/callback",
-  "https://devoted-organizer-meetup-traveler.trycloudflare.com/auth/shopify/callback",
-  "https://devoted-organizer-meetup-traveler.trycloudflare.com/api/auth/callback"
+  "https://phpstack-362288-5094532.cloudwaysapps.com/auth/callback",
+  "https://phpstack-362288-5094532.cloudwaysapps.com/auth/shopify/callback",
+  "https://phpstack-362288-5094532.cloudwaysapps.com/api/auth/callback"
 ]
 
 [app_proxy]
-url = "https://devoted-organizer-meetup-traveler.trycloudflare.com/api"
+url = "https://phpstack-362288-5094532.cloudwaysapps.com/api"
 subpath = "view"
 prefix = "a"
 
@@ -30,6 +30,6 @@ prefix = "a"
 embedded = false
 
 [build]
-dev_store_url = "junaidamjad936.myshopify.com"
+dev_store_url = "conversion-king-x.myshopify.com"
 automatically_update_urls_on_dev = true
 include_config_on_deploy = true
