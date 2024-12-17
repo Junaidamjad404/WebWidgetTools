@@ -150,10 +150,10 @@ class widgetController extends Controller
                         "width" => $request->discount_widget['input']['width'] ?? "100%",
                         "margin_top" => $request->discount_widget['input']['margin_top'] ?? "100%",
                     ],
-                    "input_hover"=>[
-                        "text_color"=>$request->discount_widget['input_hover']["text_color"]??"white",
-                        "background_color"=>$request->discount_widget['input_hover']["background_color"]??"black",
-                        "border"=>$request->discount_widget['input_hover']["border"]??"2px solid black"
+                    "button_hover"=>[
+                        "text_color"=>$request->discount_widget['button_hover']["text_color"]??"white",
+                        "background_color"=>$request->discount_widget['button_hover']["background_color"]??"black",
+                        "border"=>$request->discount_widget['button_hover']["border"]??"2px solid black"
                     ],
                     "button" => [
                         "min_height" =>$request->discount_widget['button']['min_height'] ?? "45px",
@@ -232,10 +232,18 @@ class widgetController extends Controller
         }
     }
     public function appendVariablefunc($text){
-        $textParts = preg_split('/\s+/', $text, 2); // Split into first word and the rest of the sentence
-        $textParts[0] .= ' {discount_price}'; // Append the placeholder {{variable}} after the first word
-        $dynamicLine = implode(' ', $textParts) ;
-        return $dynamicLine;
+        // Check if the text contains {discount_code}, and if so, don't append anything
+        if (preg_match('/\{discount_code\}/', $text)) {
+            // Replace any variant of discount_code (e.g., {1223discount_code}, {discount_code123}) with {discount_code}
+            $text = preg_replace('/\{.*discount_code\w*\}/', '{discount_code}', $text);
+        } else {
+            // If {discount_code} is not present, append {discount_price} after the first word
+            $textParts = preg_split('/\s+/', $text, 2); // Split into first word and the rest of the sentence
+            $textParts[0] .= ' {discount_price}'; // Append the placeholder {discount_price} after the first word
+            $text = implode(' ', $textParts);
+        }
+
+        return $text;
     }
     protected function getAppInstalledGlobalId($shop, $session)
     {

@@ -16,7 +16,11 @@ class Modules extends Model
     protected $casts = [
         'status' => 'boolean',
     ];
-
+     public function getCustomSettingsAttribute($value)
+    {
+        return json_decode($value, true); // Decode the JSON string into an array
+    }
+    
     public function generalModule(){
         return $this->belongsTo(GeneralModules::class, 'general_module_id');
     }
