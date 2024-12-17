@@ -147,7 +147,7 @@ class widgetController extends Controller
                         "font_size"=>$request->discount_widget['input']['font_size']??"1.4rem",
                         "border_radius"=>$request->discount_widget['input']['border_radius']??"1px",
                         "min_height" => $request->discount_widget['input']['min_height'] ?? "45px",
-                        "wdith" => $request->discount_widget['input']['wdith'] ?? "100%",
+                        "width" => $request->discount_widget['input']['width'] ?? "100%",
                         "margin_top" => $request->discount_widget['input']['margin_top'] ?? "100%",
                     ],
                     "input_hover"=>[
