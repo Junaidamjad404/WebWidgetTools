@@ -129,26 +129,51 @@ class widgetController extends Controller
             $generalModule = GeneralModules::findOrFail($request->general_module_id);
             // Prepare metafield value with defaults
             $metafieldValue = [
-                'title' => $request->title,
                 "discount_price_container"=>[
                     "text"=>
                     $this->appendVariablefunc(
-                        $request->discount_price_container['discount_price_container_Text'],
+                        $request->discount_price_container['discount_price_container_Text'] ?? "OR IF YOU"
                     ),
-                    "font_size"=>$request->discount_price_container['font_size'],
-                    "text_color"=>$request->discount_price_container['text_color'],
-                    "action"=>$request->discount_price_container['discount_price_container_action_Text']
+                    "font_size"=>$request->discount_price_container['font_size'] ?? "1.4rem",
+                    "text_color"=>$request->discount_price_container['text_color'] ?? "black",
+                    "background_color" => $request->discount_price_container['background_color'] ?? "#ffffff",
+                    "action"=>$request->discount_price_container['discount_price_container_action_Text'] ?? "SIGN UP FOR THE NEWSLETTER."
                 ],
-                'content' => $request->content,
-                'bgColor' => $request->bgColor ?? '#ffffff',
-                'padding' => $request->padding ?? '10px',
-                'margin' => $request->margin ?? '5px',
-                'fontSize' => $request->fontSize ?? '14px',
-                'fontWeight' => $request->fontWeight ?? 'normal',
-                'textColor' => $request->textColor ?? '#000000',
-                'emailPadding' => $request->emailPadding ?? '10px',
-                'buttonBgColor' => $request->buttonBgColor ?? '#000000',
-                'buttonFontSize' => $request->buttonFontSize ?? '14px',
+                "discount_widget"=>[
+                    "input"=>[
+                        "padding"=>$request->discount_widget['input']['padding']??"10px",
+                        "font_size"=>$request->discount_widget['input']['font_size']??"1.4rem",
+                        "border_radius"=>$request->discount_widget['input']['border_radius']??"1px",
+                        "min_height" => $request->discount_widget['input']['min_height'] ?? "45px",
+                        "wdith" => $request->discount_widget['input']['wdith'] ?? "100%",
+                        "margin_top" => $request->discount_widget['input']['margin_top'] ?? "100%",
+                    ],
+                    "button" => [
+                        "min_height" => $request->discount_widget['button']['min_height'] ?? "45px",
+                        "wdith" => $request->discount_widget['button']['wdith'] ?? "100%",
+                        "padding"=>$request->discount_widget['button']['padding']??"13px 15px",
+                        "background_color" => $request->discount_widget['button']['background_color'] ?? "black",
+                        "text_color"=>$request->discount_widget['button']['text_color'] ?? "white",
+                        "border"=>$request->discount_widget['button']['border']??"1px solid black",
+                        "cursor" => $request->discount_widget['button']['cursor']??"pointer",
+                        "font_size"=>$request->discount_widget['button']['font_size']??"1.4rem",
+                        "font_weight"=>$request->discount_widget['button']['font_weight'] ?? "500",
+                        "letter_spacing" => $request->discount_widget['button']['letter_spacing'] ?? "0.1rem"
+                    ]
+                ],
+                "content"=>[
+                        "text"=>$request->discount_widget['content']['text']??"By signing up, you agree to receive commercial communications from the store. You may withdraw your consent whenever you want ",
+                        "font_size"=>$request->discount_widget['content']['font_size']??"1rem",
+                        "line_height"=>$request->discount_widget['content']['line_height']??"1.4rem",
+                        "text_color" => $request->discount_widget['content']['line_height'] ?? "black",
+                        "letter_spacing" => $request->discount_widget['button']['letter_spacing'] ?? "0.1rem",
+                        "anchor_tag"=>[
+                            "text"=>$request->discount_widget['button']['anchor_tag']['text'] ?? "Privacy Policy",
+                            "text_color"=>$request->discount_widget['button']['anchor_tag']['text_color'] ?? "blue"
+                        ]
+                ],
+
+                
                 "discount_percentage" => $request->discount_percentage ?? '10%', 
                 "status" => $request->status ?? false ,
 
