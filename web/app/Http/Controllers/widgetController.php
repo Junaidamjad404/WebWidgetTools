@@ -149,9 +149,9 @@ class widgetController extends Controller
                         "margin_top" => $request->discount_widget['input']['margin_top'] ?? "100%",
                     ],
                     "input_hover"=>[
-                        "text_color"=>"white",
-                        "background_color"=>"black",
-                        "border"=>"2px solid black"
+                        "text_color"=>$request->discount_widget['input_hover']["text_color"]??"white",
+                        "background_color"=>$request->discount_widget['input_hover']["background_color"]??"black",
+                        "border"=>$request->discount_widget['input_hover']["border"]??"2px solid black"
                     ],
                     "button" => [
                         "min_height" => $request->discount_widget['button']['min_height'] ?? "45px",
