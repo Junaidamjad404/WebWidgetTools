@@ -132,7 +132,7 @@ class widgetController extends Controller
                 "discount_price_container"=>[
                     "text"=>
                     $this->appendVariablefunc(
-                        $request->discount_price_container['discount_price_container_Text'] ?? "OR IF YOU"
+                        $request->discount_price_container['discount_price_container_Text'] ?? "OR IF YOU","{discount_price}"
                     ),
                     "font_size"=>$request->discount_price_container['font_size'] ?? "1.4rem",
                     "text_color"=>$request->discount_price_container['text_color'] ?? "black",
@@ -186,13 +186,19 @@ class widgetController extends Controller
                         "margin_top"=>$request->success['margin_top']??"10px",
                         "font_size"=>$request->success['font_size']??"1.4rem",
                         "line_height"=>$request->success['line_height']??"20px",
-                        "text_color"=>$request->success['text_color']??"green"
+                        "text_color"=>$request->success['text_color']??"green",
+                        "text"=>$this->appendVariablefunc(
+                        $request->success['text'] ?? "Your Coupon Code is ","{discount_code}"
+                    )
+
                 ],
                     "error"=>[
                         "margin_top"=>$request->error['margin_top']??"10px",
                         "font_size"=>$request->error['font_size']??"1.4rem",
                         "line_height"=>$request->error['line_height']??"20px",
-                        "text_color"=>$request->error['text_color']??"green"
+                        "text_color"=>$request->error['text_color']??"green",
+                        "text"=>$request->error['text']??"Customer already exists."
+
                     ], 
                 
                 "discount_percentage" => $request->discount_percentage ?? '10%', 
@@ -244,20 +250,23 @@ class widgetController extends Controller
             return response()->json(['error' => 'An unexpected error occurred.', 'details' => $e->getMessage()], 500);
         }
     }
-    public function appendVariablefunc($text){
-        // Check if the text contains {discount_code}, and if so, don't append anything
-        if (preg_match('/\{discount_code\}/', $text)) {
-            // Replace any variant of discount_code (e.g., {1223discount_code}, {discount_code123}) with {discount_code}
-            $text = preg_replace('/\{.*discount_code\w*\}/', '{discount_code}', $text);
-        } else {
-            // If {discount_code} is not present, append {discount_price} after the first word
+    public function appendVariablefunc($text, $placeholder = '{discount_price}')
+    {
+        // Replace any variant of the placeholder (e.g., {placeholder123}, {123placeholder}) with the exact placeholder
+        $regex = '/\{.*' . preg_quote(trim($placeholder, '{}'), '/') . '\w*\}/';
+        $text = preg_replace($regex, $placeholder, $text);
+
+        // Check if the placeholder is already present in the text
+        if (!str_contains($text, $placeholder)) {
+            // If not, append the placeholder after the first word
             $textParts = preg_split('/\s+/', $text, 2); // Split into first word and the rest of the sentence
-            $textParts[0] .= ' {discount_price}'; // Append the placeholder {discount_price} after the first word
+            $textParts[0] .= " $placeholder"; // Append the placeholder after the first word
             $text = implode(' ', $textParts);
         }
 
         return $text;
     }
+
     protected function getAppInstalledGlobalId($shop, $session)
     {
         try {
