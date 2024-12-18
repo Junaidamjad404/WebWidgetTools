@@ -170,14 +170,15 @@ class widgetController extends Controller
                     ]
                 ],
                 "content"=>[
-                        "text"=>$request->discount_widget['content']['text']??"By signing up, you agree to receive commercial communications from the store. You may withdraw your consent whenever you want ",
-                        "font_size"=>$request->discount_widget['content']['font_size']??"1rem",
-                        "line_height"=>$request->discount_widget['content']['line_height']??"1.4rem",
-                        "text_color" => $request->discount_widget['content']['line_height'] ?? "black",
-                        "letter_spacing" => $request->discount_widget['button']['letter_spacing'] ?? "0.1rem",
+                        "all"=>$request->content,
+                        "text"=>$request->content['text']??"By signing up, you agree to receive commercial communications from the store. You may withdraw your consent whenever you want ",
+                        "font_size"=>$request->content['font_size']??"1rem",
+                        "line_height"=>$request->content['line_height']??"1.4rem",
+                        "text_color" => $request->content['line_height'] ?? "black",
+                        "letter_spacing" => $request->button['letter_spacing'] ?? "0.1rem",
                         "anchor_tag"=>[
-                            "text"=>$request->discount_widget['button']['anchor_tag']['text'] ?? "Privacy Policy",
-                            "text_color"=>$request->discount_widget['button']['anchor_tag']['text_color'] ?? "blue"
+                            "text"=>$request->button['anchor_tag']['text'] ?? "Privacy Policy",
+                            "text_color"=>$request->button['anchor_tag']['text_color'] ?? "blue"
                         ]
                 ],
 
@@ -204,7 +205,7 @@ class widgetController extends Controller
 
             // Log the response from the API
             log::info('Response from Set Metafield: ' . json_encode($response));
-
+            dd($response);
             // Check for errors in the API response
             if (isset($response['errors']) && $response['errors']) {
                 log::error('GraphQL API Errors: ' . json_encode($response['errors']));
@@ -221,7 +222,9 @@ class widgetController extends Controller
             // Update custom settings of the general module
             log::info('Custom Settings of Module: ' . json_encode($response['body']->data->metafieldsSet->metafields[0]->value));
             $generalModule->module->custom_settings = $response['body']->data->metafieldsSet->metafields[0]->value;
+            $generalModule->module->status = $metafieldValue['status'];
             $generalModule->module->save();
+            dd($generalModule->module);
 
             // Return success response
             return response()->json(['success' => true, 'message' => 'Metafield set successfully.']);
@@ -405,6 +408,11 @@ class widgetController extends Controller
             'email' => 'required|email',
         ]);
         log::info('Request of checkCustomer'.json_encode($request->all()));
+        $module_status = GeneralModules::where('handle','First_Sign_Up_Discount')->first()->module->status;
+        if(!$module_status){
+            log::info('Status of Modules is set false.');
+            return response()->json(['error' => 'Status of the Modules is disable']); 
+        }
         // Retrieve shop session and shop API instance
         $session =Session::where('shop',$request->shopDomain)->first();
         $shop = $this->helperController->getShopApi($session->shop);
