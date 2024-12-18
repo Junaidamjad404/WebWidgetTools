@@ -130,10 +130,7 @@ class widgetController extends Controller
             // Prepare metafield value with defaults
             $metafieldValue = [
                 "discount_price_container"=>[
-                    "text"=>
-                    $this->appendVariablefunc(
-                        $request->discount_price_container['discount_price_container_Text'] ?? "OR IF YOU","{discount_price}"
-                    ),
+                    "text"=>$request->discount_price_container['discount_price_container_Text'] ?? "OR {discount_price} IF YOU",
                     "font_size"=>$request->discount_price_container['font_size'] ?? "1.4rem",
                     "text_color"=>$request->discount_price_container['text_color'] ?? "black",
                     "background_color" => $request->discount_price_container['background_color'] ?? "#ffffff",
@@ -187,10 +184,7 @@ class widgetController extends Controller
                         "font_size"=>$request->success['font_size']??"1.4rem",
                         "line_height"=>$request->success['line_height']??"20px",
                         "text_color"=>$request->success['text_color']??"green",
-                        "text"=>$this->appendVariablefunc(
-                        $request->success['text'] ?? "Your Coupon Code is ","{discount_code}"
-                    )
-
+                        "text"=>$request->success['text'] ?? "Your Coupon Code is {discount_code} "
                 ],
                     "error"=>[
                         "margin_top"=>$request->error['margin_top']??"10px",
@@ -250,25 +244,7 @@ class widgetController extends Controller
             return response()->json(['error' => 'An unexpected error occurred.', 'details' => $e->getMessage()], 500);
         }
     }
-    public function appendVariablefunc($text, $placeholder = '{discount_price}')
-    {
-        // Replace any variant of the placeholder (e.g., {placeholder123}, {123placeholder}) with the exact placeholder
-        $regex = '/\{.*' . preg_quote(trim($placeholder, '{}'), '/') . '\w*\}/';
-        $text = preg_replace($regex, $placeholder, $text);
-
-        // Check if the placeholder is already present in the text
-         if ($placeholder === '{discount_price}') {
-            // Append the placeholder after the first word
-            $textParts = preg_split('/\s+/', $text, 2); // Split into first word and the rest of the sentence
-            $textParts[0] .= " $placeholder"; // Append the placeholder after the first word
-            $text = implode(' ', $textParts);
-        } elseif ($placeholder === '{discount_code}') {
-            // Append the placeholder at the end
-            $text = rtrim($text) . " $placeholder";
-        }
-
-        return $text;
-    }
+   
 
     protected function getAppInstalledGlobalId($shop, $session)
     {
