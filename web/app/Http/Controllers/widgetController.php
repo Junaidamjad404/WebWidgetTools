@@ -180,7 +180,18 @@ class widgetController extends Controller
                             "text_color"=>$request->button['anchor_tag']['text_color'] ?? "blue"
                         ]
                 ],
-
+                 "success"=>[
+                        "margin_top"=>$request->success['margin_top']??"10px",
+                        "font_size"=>$request->success['font_size']??"1.4rem",
+                        "line_height"=>$request->success['line_height']??"20px",
+                        "text_color"=>$request->success['text_color']??"green"
+                ],
+                    "error"=>[
+                        "margin_top"=>$request->error['margin_top']??"10px",
+                        "font_size"=>$request->error['font_size']??"1.4rem",
+                        "line_height"=>$request->error['line_height']??"20px",
+                        "text_color"=>$request->error['text_color']??"green"
+                    ], 
                 
                 "discount_percentage" => $request->discount_percentage ?? '10%', 
                 "status" => $request->status ?? 0 ,
