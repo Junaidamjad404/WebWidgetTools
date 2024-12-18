@@ -170,7 +170,6 @@ class widgetController extends Controller
                     ]
                 ],
                 "content"=>[
-                        "all"=>$request->content,
                         "text"=>$request->content['text']??"By signing up, you agree to receive commercial communications from the store. You may withdraw your consent whenever you want ",
                         "font_size"=>$request->content['font_size']??"1rem",
                         "line_height"=>$request->content['line_height']??"1.4rem",
@@ -184,7 +183,7 @@ class widgetController extends Controller
 
                 
                 "discount_percentage" => $request->discount_percentage ?? '10%', 
-                "status" => $request->status ?? false ,
+                "status" => $request->status ?? 0 ,
 
             ];
             // Set variables for the GraphQL request
@@ -205,7 +204,6 @@ class widgetController extends Controller
 
             // Log the response from the API
             log::info('Response from Set Metafield: ' . json_encode($response));
-            dd($response);
             // Check for errors in the API response
             if (isset($response['errors']) && $response['errors']) {
                 log::error('GraphQL API Errors: ' . json_encode($response['errors']));
@@ -224,7 +222,6 @@ class widgetController extends Controller
             $generalModule->module->custom_settings = $response['body']->data->metafieldsSet->metafields[0]->value;
             $generalModule->module->status = $metafieldValue['status'];
             $generalModule->module->save();
-            dd($generalModule->module);
 
             // Return success response
             return response()->json(['success' => true, 'message' => 'Metafield set successfully.']);
