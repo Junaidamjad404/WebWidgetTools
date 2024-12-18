@@ -132,7 +132,7 @@ class widgetController extends Controller
                 "discount_price_container"=>[
                     "text"=>
                     $this->appendVariablefunc(
-                        $request->discount_price_container['discount_price_container_Text'] ?? "OR IF YOU"
+                        $request->discount_price_container['discount_price_container_Text'] ?? "OR IF YOU","{discount_price}"
                     ),
                     "font_size"=>$request->discount_price_container['font_size'] ?? "1.4rem",
                     "text_color"=>$request->discount_price_container['text_color'] ?? "black",
@@ -187,7 +187,9 @@ class widgetController extends Controller
                         "font_size"=>$request->success['font_size']??"1.4rem",
                         "line_height"=>$request->success['line_height']??"20px",
                         "text_color"=>$request->success['text_color']??"green",
-                        "text"=>$this->appendVariablefunc($request->success['text'] ?? "Your Coupon code is ")
+                        "text"=>$this->appendVariablefunc(
+                        $request->success['text'] ?? "Your Coupon Code is ","{discount_code}"
+                    )
 
                 ],
                     "error"=>[
@@ -248,30 +250,25 @@ class widgetController extends Controller
             return response()->json(['error' => 'An unexpected error occurred.', 'details' => $e->getMessage()], 500);
         }
     }
-   public function appendVariablefunc($text)
-{
-    // Handle {discount_price} placeholder
-    if (preg_match('/\{discount_price\}/', $text)) {
-        // Replace any variant of {discount_price} with the exact placeholder
-        $text = preg_replace('/\{.*discount_price\w*\}/', '{discount_price}', $text);
-    } else {
-        // If {discount_price} is not present, append it after the first word
-        $textParts = preg_split('/\s+/', $text, 2); // Split into first word and the rest of the sentence
-        $textParts[0] .= ' {discount_price}'; // Append {discount_price} after the first word
-        $text = implode(' ', $textParts);
-    }
+    public function appendVariablefunc($text, $placeholder = '{discount_price}')
+    {
+        // Replace any variant of the placeholder (e.g., {placeholder123}, {123placeholder}) with the exact placeholder
+        $regex = '/\{.*' . preg_quote(trim($placeholder, '{}'), '/') . '\w*\}/';
+        $text = preg_replace($regex, $placeholder, $text);
 
-    // Handle {discount_code} placeholder
-    if (preg_match('/\{discount_code\}/', $text)) {
-        // Replace any variant of {discount_code} with the exact placeholder
-        $text = preg_replace('/\{.*discount_code\w*\}/', '{discount_code}', $text);
-    } else {
-        // If {discount_code} is not present, append it at the end of the text
-        $text = rtrim($text) . ' {discount_code}';
-    }
+        // Check if the placeholder is already present in the text
+         if ($placeholder === '{discount_price}') {
+            // Append the placeholder after the first word
+            $textParts = preg_split('/\s+/', $text, 2); // Split into first word and the rest of the sentence
+            $textParts[0] .= " $placeholder"; // Append the placeholder after the first word
+            $text = implode(' ', $textParts);
+        } elseif ($placeholder === '{discount_code}') {
+            // Append the placeholder at the end
+            $text = rtrim($text) . " $placeholder";
+        }
 
-    return $text;
-}
+        return $text;
+    }
 
     protected function getAppInstalledGlobalId($shop, $session)
     {
